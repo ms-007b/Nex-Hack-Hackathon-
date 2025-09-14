@@ -1,1 +1,7 @@
 # Nex-Hack-Hackathon-
+Participated in Nexhack 1.0
+TEAM MEMBERS
+1. AYUSH JAISWAL
+2. ANUSHKA JAISHWAL
+3. MUSKAN SHARMA
+4. TANVI SHAH
