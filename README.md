@@ -1,4 +1,4 @@
-# Nex-Hack-Hackathon-
+# Nex-Hack-Hackathon
 Participated in Nexhack 1.0
 TEAM MEMBERS
 1. AYUSH JAISWAL
