@@ -4,6 +4,7 @@ import Features from "@/components/Features";
 import DeviceShowcase from "@/components/DeviceShowcase";
 import Footer from "@/components/Footer";
 import LearningSection from "@/components/Learning";
+import VideoPlayer from "@/components/VideoPlayer";
 
 const Index = () => {
   return (
@@ -13,6 +14,7 @@ const Index = () => {
       <Features />
       <DeviceShowcase />
       <LearningSection />
+      <VideoPlayer />
       <Footer />
     </div>
   );
