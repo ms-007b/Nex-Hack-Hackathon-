@@ -3,6 +3,9 @@ import GoogleStrategy from "passport-google-oauth20";
 import GitHubStrategy from "passport-github2";
 import User from "../models/User.js";
 
+// -------------------------
+// Google OAuth Strategy
+// -------------------------
 passport.use(
   new GoogleStrategy(
     {
@@ -13,13 +16,15 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         let user = await User.findOne({ googleId: profile.id });
+
         if (!user) {
           user = await User.create({
             googleId: profile.id,
             name: profile.displayName,
-            email: profile.emails[0].value,
+            email: profile.emails?.[0]?.value || "",
           });
         }
+
         return done(null, user);
       } catch (err) {
         return done(err, null);
@@ -28,6 +33,9 @@ passport.use(
   )
 );
 
+// -------------------------
+// GitHub OAuth Strategy
+// -------------------------
 passport.use(
   new GitHubStrategy(
     {
@@ -38,6 +46,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         let user = await User.findOne({ githubId: profile.id });
+
         if (!user) {
           user = await User.create({
             githubId: profile.id,
@@ -45,6 +54,7 @@ passport.use(
             email: profile.emails?.[0]?.value || "",
           });
         }
+
         return done(null, user);
       } catch (err) {
         return done(err, null);
@@ -53,13 +63,20 @@ passport.use(
   )
 );
 
+// -------------------------
+// Session Management
+// -------------------------
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user.id); // save user ID to session
 });
 
 passport.deserializeUser(async (id, done) => {
-  const user = await User.findById(id);
-  done(null, user);
+  try {
+    const user = await User.findById(id);
+    done(null, user); // attach user to req.user
+  } catch (err) {
+    done(err, null);
+  }
 });
 
 export default passport;

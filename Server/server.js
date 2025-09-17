@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 import passport from "passport";
 import session from "express-session";
 import cors from "cors";
-
 import "./config/passport.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -12,7 +11,7 @@ import userRoutes from "./routes/userRoutes.js";
 dotenv.config();
 const app = express();
 
-// 🔹 Middleware
+// Middleware
 app.use(express.json());
 app.use(
   cors({
@@ -21,7 +20,7 @@ app.use(
   })
 );
 
-// 🔹 Session setup (required for Passport)
+// Session setup (required for Passport)
 app.use(
   session({
     secret: "keyboardcat",
@@ -43,12 +42,7 @@ app.use("/api/users", userRoutes);
 
 // 🔹 Database + Server Start
 const PORT = 8080;
-
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    app.listen(PORT, () =>
-      console.log(`🚀 Server running at http://localhost:${PORT}`)
-    );
-  })
-  .catch((err) => console.error("❌ DB connection error:", err));
+mongoose.connect(process.env.MONGO_URI).then(() => {
+  app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
+}
+).catch((err) => console.error("❌ DB connection error:", err));
