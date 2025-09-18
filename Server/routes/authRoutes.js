@@ -52,6 +52,7 @@ router.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "http://localhost:8080/login" }),
   (req, res) => {
+    console.log("Logged in user:", req.user);
     res.redirect("http://localhost:8080/dashboard");
   }
 );
@@ -63,6 +64,7 @@ router.get(
   "/github/callback",
   passport.authenticate("github", { failureRedirect: "http://localhost:8080/login" }),
   (req, res) => {
+    console.log("Logged in user:", req.user);
     res.redirect("http://localhost:8080/dashboard");
   }
 );
