@@ -35,55 +35,60 @@ passport.use(
 );
 
 // Google OAuth Strategy
-passport.use( new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:8080/auth/google/callback",
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        let user = await User.findOne({ googleId: profile.id });
-        if (!user) {
-          user = await User.create({
-            googleId: profile.id,
-            username: profile.displayName,
-            email: profile.emails?.[0]?.value || "",
-          });
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: "http://localhost:8080/auth/google/callback",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          let user = await User.findOne({ googleId: profile.id });
+          if (!user) {
+            user = await User.create({
+              googleId: profile.id,
+              username: profile.displayName,
+              email: profile.emails?.[0]?.value || "",
+            });
+          }
+          return done(null, user);
+        } catch (err) {
+          return done(err, null);
         }
-        return done(null, user);
-      } catch (err) {
-        return done(err, null);
       }
-    }
-  )
-);
+    )
+  );
+}
 
 // GitHub OAuth Strategy
-passport.use(
-  new GitHubStrategy(
-    {
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: "http://localhost:8080/auth/github/callback",
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        let user = await User.findOne({ githubId: profile.id });
-        if (!user) {
-          user = await User.create({
-            githubId: profile.id,
-            username: profile.displayName || profile.username,
-            email: profile.emails?.[0]?.value || "",
-          });
+if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
+  passport.use(
+    new GitHubStrategy(
+      {
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: "http://localhost:8080/auth/github/callback",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          let user = await User.findOne({ githubId: profile.id });
+          if (!user) {
+            user = await User.create({
+              githubId: profile.id,
+              username: profile.displayName || profile.username,
+              email: profile.emails?.[0]?.value || "",
+            });
+          }
+          return done(null, user);
+        } catch (err) {
+          return done(err, null);
         }
-        return done(null, user);
-      } catch (err) {
-        return done(err, null);
       }
-    }
-  )
-);
+    )
+  );
+}
 
 // Session Handling
 passport.serializeUser((user, done) => {
