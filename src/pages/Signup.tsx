@@ -73,6 +73,14 @@ export default function Signup() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+        <input
+          type="password"
+          placeholder="confirmPassword"
+          className="w-full p-2 mb-4 rounded-lg focus:outline-none"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+        />
         <button
           type="submit"
           className="w-full bg-gradient-to-r from-green-400 to-blue-500 text-white py-2 rounded-lg"
