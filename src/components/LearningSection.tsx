@@ -120,7 +120,6 @@ const LearningSection: React.FC<LearningSectionProps> = ({ user }) => {
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Learning Hub</h1>
           <p className="text-gray-600">Build your self-defense skills with interactive training modules</p>
         </div>
-        
         <div className="mt-4 lg:mt-0 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div className="flex items-center space-x-6">
             <div className="text-center">
@@ -138,7 +137,6 @@ const LearningSection: React.FC<LearningSectionProps> = ({ user }) => {
           </div>
         </div>
       </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Learning Modules */}
         <div className="lg:col-span-2 space-y-6">
@@ -172,9 +170,7 @@ const LearningSection: React.FC<LearningSectionProps> = ({ user }) => {
                         </div>
                         <h3 className="text-lg font-semibold text-gray-900">{module.title}</h3>
                       </div>
-                      
                       <p className="text-gray-600 mb-4">{module.description}</p>
-                      
                       <div className="flex items-center space-x-6 text-sm text-gray-500">
                         <div className="flex items-center space-x-1">
                           <Clock className="h-4 w-4" />
@@ -197,7 +193,6 @@ const LearningSection: React.FC<LearningSectionProps> = ({ user }) => {
                         </div>
                       </div>
                     </div>
-                    
                     <div className="flex flex-col items-end space-y-2">
                       {module.completed && (
                         <div className="flex items-center space-x-1 text-green-600">
@@ -216,7 +211,6 @@ const LearningSection: React.FC<LearningSectionProps> = ({ user }) => {
                       )}
                     </div>
                   </div>
-                  
                   {activeModule === module.id && !module.locked && (
                     <div className="mt-6 pt-6 border-t border-gray-200">
                       <h4 className="font-semibold text-gray-900 mb-3">Module Content</h4>

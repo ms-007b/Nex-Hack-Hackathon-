@@ -2,15 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  Shield,
-  MapPin,
-  Zap,
-  Smartphone,
-  Wifi,
-  Battery,
-  Bell,
-  Lock,
-  Radio
+  Shield,MapPin, Zap,Smartphone,Wifi,Battery,Bell,Lock,Radio
 } from "lucide-react";
 import deviceMockup from "@/assets/device-mockup.jpg";
 

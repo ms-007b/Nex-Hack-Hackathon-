@@ -1,13 +1,41 @@
 import passport from "passport";
-import GoogleStrategy from "passport-google-oauth20";
-import GitHubStrategy from "passport-github2";
-import User from "../models/User.js";
+import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Strategy as GitHubStrategy } from "passport-github2";
+import bcrypt from "bcryptjs";
+import User from "../models/Users.js";
+import dotenv from "dotenv";
 
-// -------------------------
-// Google OAuth Strategy
-// -------------------------
+console.log("Google ID:", process.env.GOOGLE_CLIENT_ID);
+console.log("GitHub ID:", process.env.GITHUB_CLIENT_ID);
+
+// Local Strategy (username + password)
 passport.use(
-  new GoogleStrategy(
+  new LocalStrategy(
+    { usernameField: "email" }, // we’ll log in with email
+    async (email, password, done) => {
+      try {
+        const user = await User.findOne({ email });
+        if (!user) {
+          return done(null, false, { message: "User not found" });
+        }
+        if (!user.password) {
+          return done(null, false, { message: "This account uses OAuth login" });
+        }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+          return done(null, false, { message: "Invalid credentials" });
+        }
+        return done(null, user);
+      } catch (err) {
+        return done(err);
+      }
+    }
+  )
+);
+
+// Google OAuth Strategy
+passport.use( new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -16,15 +44,13 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         let user = await User.findOne({ googleId: profile.id });
-
         if (!user) {
           user = await User.create({
             googleId: profile.id,
-            name: profile.displayName,
+            username: profile.displayName,
             email: profile.emails?.[0]?.value || "",
           });
         }
-
         return done(null, user);
       } catch (err) {
         return done(err, null);
@@ -33,9 +59,7 @@ passport.use(
   )
 );
 
-// -------------------------
 // GitHub OAuth Strategy
-// -------------------------
 passport.use(
   new GitHubStrategy(
     {
@@ -46,15 +70,13 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         let user = await User.findOne({ githubId: profile.id });
-
         if (!user) {
           user = await User.create({
             githubId: profile.id,
-            name: profile.displayName || profile.username,
+            username: profile.displayName || profile.username,
             email: profile.emails?.[0]?.value || "",
           });
         }
-
         return done(null, user);
       } catch (err) {
         return done(err, null);
@@ -63,17 +85,15 @@ passport.use(
   )
 );
 
-// -------------------------
-// Session Management
-// -------------------------
+// Session Handling
 passport.serializeUser((user, done) => {
-  done(null, user.id); // save user ID to session
+  done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);
-    done(null, user); // attach user to req.user
+    done(null, user);
   } catch (err) {
     done(err, null);
   }

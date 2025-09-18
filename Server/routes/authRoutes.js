@@ -1,13 +1,21 @@
 import express from "express";
 import passport from "passport";
 import bcrypt from "bcryptjs";
-import User from "../models/User.js";
+import User from "../models/Users.js";
 
 const router = express.Router();
 
-//  USER REGISTRATION
+// Protected Profile
+router.get("/profile", (req, res) => {
+  if (!req.isAuthenticated || !req.isAuthenticated()) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  res.json(req.user);
+});
+
+// Signup (local user)
 router.post("/signup", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { username, email, password } = req.body;
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -15,7 +23,7 @@ router.post("/signup", async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
-      name,
+      username,
       email,
       password: hashedPassword,
     });
@@ -25,12 +33,19 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-//  FOR REGISTERED USERS
-
+// Login (local)
 router.post("/login", (req, res, next) => {
-  res.status(501).json({ message: "Local login not implemented yet" });
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
+    if (!user) return res.status(400).json({ message: info?.message || "Invalid credentials" });
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      return res.json({ message: "Login successful", user });
+    });
+  })(req, res, next);
 });
 
+// Google OAuth
 router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
 router.get(
@@ -40,7 +55,10 @@ router.get(
     res.redirect("http://localhost:8080/dashboard");
   }
 );
+
+// GitHub OAuth
 router.get("/github", passport.authenticate("github", { scope: ["user:email"] }));
+
 router.get(
   "/github/callback",
   passport.authenticate("github", { failureRedirect: "http://localhost:8080/login" }),
@@ -48,17 +66,19 @@ router.get(
     res.redirect("http://localhost:8080/dashboard");
   }
 );
-// GET CURRENT USER
+
+// Get current session user
 router.get("/me", (req, res) => {
-  if (req.isAuthenticated()) {
+  if (req.isAuthenticated && req.isAuthenticated()) {
     res.json({ user: req.user });
   } else {
     res.json({ user: null });
   }
 });
-// LOGOUT
+
+// Logout
 router.post("/logout", (req, res, next) => {
-  req.logout(function (err) {
+  req.logout((err) => {
     if (err) return next(err);
     res.json({ message: "Logged out" });
   });

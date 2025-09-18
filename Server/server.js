@@ -20,29 +20,29 @@ app.use(
   })
 );
 
-// Session setup (required for Passport)
+// Session (required for Passport)
 app.use(
   session({
-    secret: "keyboardcat",
+    secret: process.env.SESSION_SECRET || "keyboardcat",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 60,
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
     },
   })
 );
 
+// Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-// 🔹 Routes
+// Routes
 app.use("/auth", authRoutes);
 app.use("/api/users", userRoutes);
 
-// 🔹 Database + Server Start
+// Database + Server Start
 const PORT = 8080;
-mongoose.connect(process.env.MONGO_URI).then(() => {
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
   app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
-}
-).catch((err) => console.error("❌ DB connection error:", err));
+}).catch((err) => console.error("❌ DB connection error:", err));

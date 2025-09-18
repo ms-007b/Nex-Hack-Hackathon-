@@ -6,25 +6,32 @@ export default function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMessage("");
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match ❌");
+      return;
+    }
     try {
-      const res = await fetch("http://localhost:8080/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
-      });
-      const data = await res.json();
-      if (res.ok) {
+      const res = await axios.post(
+        "http://localhost:8080/auth/signup",
+        { username, email, password },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      if (res.status === 200) {
         alert("User Registration successful!");
-        window.location.href = "/login";
+        navigate("/login");
       } else {
-        alert("❌ " + data.message);
+        alert("❌ " + res.data.message);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Signup error:", err);
+      setMessage(err.response?.data?.message || "Signup failed ❌");
     }
   };
 
@@ -32,7 +39,7 @@ export default function Signup() {
     <div
       className="h-screen w-screen flex justify-center items-center"
       style={{
-        backgroundImage: `url('./src/assets/login_bg.png')`,
+        backgroundImage: `url('/src/assets/login_bg.png')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -45,9 +52,18 @@ export default function Signup() {
         <input
           type="text"
           placeholder="Username"
-          className="w-full p-2 mb-4 rounded-lg focus:outline-none"
+          className="w-full p-2 rounded-lg focus:outline-none"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full p-2 rounded-lg focus:outline-none"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           type="password"
@@ -55,13 +71,15 @@ export default function Signup() {
           className="w-full p-2 mb-4 rounded-lg focus:outline-none"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
         <button
-          onClick={handleSignup}
+          type="submit"
           className="w-full bg-gradient-to-r from-green-400 to-blue-500 text-white py-2 rounded-lg"
         >
           Sign Up
         </button>
+        {message && <p className="text-red-600 font-semibold">{message}</p>}
         <p className="mt-4 text-white">
           Already have an account?{" "}
           <Link to="/login" className="underline">

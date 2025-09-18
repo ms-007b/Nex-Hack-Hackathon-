@@ -31,7 +31,6 @@ const App = () => {
             <Route path="/signup" element={<Signup />} />
             {/* Protected routes */}
             <Route path="/dashboard" element={<Dashboard user={user} onLogout={logout} />}/>
-            {/* <Route path="/Learning" element={<ProtectedRoute><Learning /></ProtectedRoute />} /> This is the path for learning page*/}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -1,53 +1,91 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import api from "../lib/axios";
 
 interface User {
-  name: string;
+  _id: string;
+  username: string;
   email: string;
+  googleId?: string;
+  githubId?: string;
 }
+
 interface AuthContextType {
   user: User | null;
+  loading: boolean;
+  signup: (username: string, email: string, password: string) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
+  fetchUser: () => Promise<void>;
 }
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  // Restore session on app load
-  useEffect(() => {
-    fetch("http://localhost:8080/auth/me", { credentials: "include" })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.user) setUser(data.user);
-      })
-      .finally(() => setLoading(false));
-  }, []);
-  // Email/password login
-  const login = async (email: string, password: string) => {
-    const res = await fetch("http://localhost:8080/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-      credentials: "include", // for cookies/JWT
-    });
-    if (!res.ok) throw new Error("Login failed");
-    const data = await res.json();
-    setUser(data.user);
+
+  // Fetch current session user
+  const fetchUser = async () => {
+    try {
+      const res = await api.get("/auth/me");
+      setUser(res.data.user || null);
+    } catch (err) {
+      console.error("❌ Error fetching user:", err);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
   };
-  const logout = () => {
+
+// Run once on mount
+useEffect(() => {
+  fetchUser();
+}, []);
+
+// Local signup
+const signup = async (username: string, email: string, password: string) => {
+  try {
+    await api.post("/auth/signup", { username, email, password });
+    await fetchUser();
+  } catch (err: any) {
+    console.error("❌ Signup error:", err);
+    throw err;
+  }
+};
+
+// Local login
+const login = async (email: string, password: string) => {
+  try {
+    await api.post("/auth/login", { email, password });
+    await fetchUser();
+  } catch (err: any) {
+    console.error("❌ Login error:", err);
+    throw err;
+  }
+};
+
+// Logout
+const logout = async () => {
+  try {
+    await api.post("/auth/logout");
     setUser(null);
-    fetch("http://localhost:8080/api/auth/logout", { method: "POST", credentials: "include" });
-  };
-  return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  } catch (err) {
+    console.error("❌ Logout error:", err);
+  }
 };
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used inside AuthProvider");
-  return context;
-};
+
+return (
+  <AuthContext.Provider value={{ user, loading, signup, login, logout, fetchUser }}>
+    {children}
+  </AuthContext.Provider>
+);
+}
+
+// Custom hook
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    throw new Error("useAuth must be used inside AuthProvider");
+  }
+  return ctx;
+}
