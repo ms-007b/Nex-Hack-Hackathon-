@@ -22,7 +22,7 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_startTransition: true }}>
           <Routes>
             {/* public Routes */}
             <Route path="/" element={<Index />} />
@@ -31,6 +31,7 @@ const App = () => {
             <Route path="/signup" element={<Signup />} />
             {/* Protected routes */}
             <Route path="/dashboard" element={<Dashboard user={user} onLogout={logout} />}/>
+            {/* <Route path="/dashboard" element={<ProtectedRoute><Dashboard user={user} onLogout={logout} /></ProtectedRoute>}/> Uuncomment this after valid login signup */}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
