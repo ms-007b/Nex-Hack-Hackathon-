@@ -11,7 +11,7 @@ interface ProfileSectionProps {
 const ProfileSection: React.FC<ProfileSectionProps> = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
-    name: user.name,
+    name: user.username,
     email: user.email,
     phone: '+1-555-0123',
     address: 'New York, NY',
@@ -71,8 +71,8 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user }) => {
               <div className="flex items-center space-x-6">
                 <div className="relative">
                   <img
-                    src={user.avatar}
-                    alt={user.name}
+                    src={user.avatar || "https://via.placeholder.com/80"}
+                    alt={user.username}
                     className="w-20 h-20 rounded-full"
                   />
                   {isEditing && (
@@ -82,7 +82,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({ user }) => {
                   )}
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">{user.name}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">{user.username}</h3>
                 </div>
               </div>
 

@@ -5,14 +5,6 @@ import User from "../models/Users.js";
 
 const router = express.Router();
 
-// Protected Profile
-router.get("/profile", (req, res) => {
-  if (!req.isAuthenticated || !req.isAuthenticated()) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-  res.json(req.user);
-});
-
 // Signup (local user)
 router.post("/signup", async (req, res) => {
   const { username, email, password } = req.body;
@@ -50,10 +42,10 @@ router.get("/google", passport.authenticate("google", { scope: ["profile", "emai
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "http://localhost:8080/login" }),
+  passport.authenticate("google", { failureRedirect: "http://localhost:3000/login" }),
   (req, res) => {
     console.log("Logged in user:", req.user);
-    res.redirect("http://localhost:8080/dashboard");
+    res.redirect("http://localhost:3000/dashboard");
   }
 );
 
@@ -62,10 +54,10 @@ router.get("/github", passport.authenticate("github", { scope: ["user:email"] })
 
 router.get(
   "/github/callback",
-  passport.authenticate("github", { failureRedirect: "http://localhost:8080/login" }),
+  passport.authenticate("github", { failureRedirect: "http://localhost:3000/login" }),
   (req, res) => {
     console.log("Logged in user:", req.user);
-    res.redirect("http://localhost:8080/dashboard");
+    res.redirect("http://localhost:3000/dashboard");
   }
 );
 

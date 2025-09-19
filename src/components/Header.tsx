@@ -31,7 +31,7 @@ const Header = () => {
         <div className="hidden md:flex items-center gap-4">
           {user ? (
             <>
-              <span className="text-sm">Hi, {user.name}</span>
+              <span className="text-sm">Hi, {user.username}</span>
               <Button variant="ghost" onClick={logout}>Logout</Button>
             </>
           ) : (

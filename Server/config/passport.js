@@ -5,6 +5,7 @@ import { Strategy as GitHubStrategy } from "passport-github2";
 import bcrypt from "bcryptjs";
 import User from "../models/Users.js";
 import dotenv from "dotenv";
+dotenv.config();
 
 console.log("Google ID:", process.env.GOOGLE_CLIENT_ID);
 console.log("GitHub ID:", process.env.GITHUB_CLIENT_ID);

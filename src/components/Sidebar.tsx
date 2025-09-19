@@ -15,13 +15,13 @@ const Sidebar: React.FC<DashboardProps> = ({ user, onLogout }) => {
     const [activeTab, setActiveTab] = useState('device');
 
     const tabs = [
-        { id: 'device', name: 'Device Monitor', icon: Shield },
+        { id: 'device', name: 'Your Device', icon: Shield },
         { id: 'learning', name: 'Learn Self Defence', icon: BookOpen },
         { id: 'profile', name: 'Profile', icon: User }
     ];
     return (
-        <div className="flex">
-            <div className="w-64 bg-white border-r border-gray-200 min-h-screen">
+        <div className="flex h-full">
+            <div className="w-64 bg-white border-r border-gray-200 h-full">
                 <div className="p-6">
                     <div className="space-y-2">
                         {tabs.map((tab) => {
@@ -43,7 +43,7 @@ const Sidebar: React.FC<DashboardProps> = ({ user, onLogout }) => {
                     </div>
                 </div>
             </div>
-            <div className="flex-1 p-6">
+            <div className="flex-1 p-6 h-full overflow-auto">
                 {activeTab === 'device' && <DeviceMonitor user={user} />}
                 {activeTab === 'learning' && <LearningSection user={user} />}
                 {activeTab === 'profile' && <ProfileSection user={user} />}

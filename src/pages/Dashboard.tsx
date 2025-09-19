@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 
@@ -8,11 +8,12 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
-  const [activeTab, setActiveTab] = useState('device');
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="h-screen bg-gray-50">
       <Header />
-      <Sidebar user={user} onLogout={onLogout} />
+      <div className="flex pt-20">
+        <Sidebar user={user} onLogout={onLogout} />
+      </div>
     </div>
   );
 };

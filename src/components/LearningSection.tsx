@@ -123,10 +123,6 @@ const LearningSection: React.FC<LearningSectionProps> = ({ user }) => {
         <div className="mt-4 lg:mt-0 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <div className="flex items-center space-x-6">
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">12</div>
-              <div className="text-sm text-gray-600">Lessons Complete</div>
-            </div>
-            <div className="text-center">
               <div className="text-2xl font-bold text-green-600">630</div>
               <div className="text-sm text-gray-600">Points Earned</div>
             </div>
@@ -237,13 +233,11 @@ const LearningSection: React.FC<LearningSectionProps> = ({ user }) => {
             </div>
           </div>
         </div>
-
-        {/* Sidebar */}
+        {/*Right - Sidebar */}
         <div className="space-y-6">
-          {/* Progress Card */}
+          {/* Calander - view Card */}
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Progress</h3>
-            
             <div className="space-y-4">
               <div>
                 <div className="flex justify-between items-center mb-2">
@@ -254,7 +248,6 @@ const LearningSection: React.FC<LearningSectionProps> = ({ user }) => {
                   <div className="bg-blue-600 h-2 rounded-full" style={{ width: '33%' }}></div>
                 </div>
               </div>
-              
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Current Streak</span>
                 <div className="flex items-center space-x-1">
@@ -262,18 +255,15 @@ const LearningSection: React.FC<LearningSectionProps> = ({ user }) => {
                   <span className="text-sm font-semibold text-green-600">5 days</span>
                 </div>
               </div>
-              
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">Next Badge</span>
                 <span className="text-sm font-semibold text-purple-600">Dedication</span>
               </div>
             </div>
           </div>
-
           {/* Achievements */}
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Achievements</h3>
-            
             <div className="space-y-3">
               {achievements.map((achievement, index) => (
                 <div 
@@ -304,32 +294,10 @@ const LearningSection: React.FC<LearningSectionProps> = ({ user }) => {
               ))}
             </div>
           </div>
-
-          {/* Quick Actions */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-            
-            <div className="space-y-3">
-              <button className="w-full flex items-center space-x-3 p-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors">
-                <Target className="h-5 w-5" />
-                <span>Practice Quiz</span>
-              </button>
-              
-              <button className="w-full flex items-center space-x-3 p-3 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition-colors">
-                <Users className="h-5 w-5" />
-                <span>Study Group</span>
-              </button>
-              
-              <button className="w-full flex items-center space-x-3 p-3 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors">
-                <BookOpen className="h-5 w-5" />
-                <span>Resource Library</span>
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default LearningSection;
+export default LearningSection; 
