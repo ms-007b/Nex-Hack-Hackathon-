@@ -308,11 +308,11 @@ const LearningSection: React.FC<LearningSectionProps> = ({ user }) => {
         <div className="space-y-6">
           {/* Calendar View Card */}
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            {/* <h3 className="text-lg font-semibold text-gray-900 mb-4">
               Your Progress
-            </h3>
+            </h3> */}
             <div className="space-y-4">
-              <div>
+              {/* <div>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm text-gray-600">
                     Overall Completion
@@ -327,7 +327,7 @@ const LearningSection: React.FC<LearningSectionProps> = ({ user }) => {
                     style={{ width: "33%" }}
                   ></div>
                 </div>
-              </div>
+              </div> */}
               
               {/* Weekly Calendar Component */}
               <WeeklyCalendar />

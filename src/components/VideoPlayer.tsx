@@ -86,11 +86,11 @@ const VideoPlayer = () => {
 
   return (
     <div className="video-player-container p-4">
-      <div className="badge-display text-4xl text-center my-4">
+      {/* <div className="badge-display text-4xl text-center my-4">
         <span role="img" aria-label="achievement badge">
           {currentBadge}
         </span>
-      </div>
+      </div> */}
 
       <div className="video-container">
         {currentVideo ? (
