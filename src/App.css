@@ -171,5 +171,17 @@ button:hover {
 }
 
 
+ .user-profile { display: flex; align-items: center; gap: 15px; }
+    .user-profile > span, .user-profile > div {
+      background-color: var(--bg-light);
+      padding: 8px 12px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 5px var(--shadow-medium);
+      border: 1px solid var(--border-color);
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    #streakDisplay, #coinDisplay, #freezeDisplay { color: var(--text-accent); font-size: 1.2em; }
 
 
